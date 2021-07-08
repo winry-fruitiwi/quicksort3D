@@ -5,6 +5,46 @@
 # v0.3 visualize iterative quicksort with rectangles
 # v0.4 visualize with boxes in 3D
 
+def recursive_quicksort(lst, start, stop): # end turns out to be a Processing builtin so I'm avoiding it!
+    # base case: if the list's length is less than two, return.
+    # This is an out-place sort, if such a phrase exists.
+    if start >= stop:
+        return
+    
+    # let's define our variables!
+    # l_ptr is the less than pointer, which we will use later in the partitioning step. We use it to keep track 
+    # of where the lesser than values are.
+    l_ptr = start
+    # the pvt is the pivot value, which we will compare to other elements in the partitioning step loop.
+    pvt = lst[stop]
+    
+    # let's start partitioning! We should get a list where all the elements to the left of the pivot are lesser
+    # than it and everything to the right is greater than the pivot.
+    for i in range(start, stop):
+        # we need to check for elements less than a pivot. If there are:
+        if lst[i] < lst[stop]:
+            # we need to increment the less than pointer so that we achieve the goal we set before this loop.
+            # But first, we need to swap whatever's at the pointer with our current element!
+            lst[i], lst[l_ptr] = lst[l_ptr], lst[i] # one of my common mistakes is not swapping at all!
+            l_ptr += 1
+    
+    # Phew, that was a long loop! But before we go out of loop business, we should swap the end with the l_ptr
+    # to ensure that the pivot is in the right place.
+    lst[stop], lst[l_ptr] = lst[l_ptr], lst[stop]
+    
+    # Ok, one more complicated obstacle before we can get out of this function: the recursive calls!
+    # We need to get two recursive calls that both exclude the pivot.
+    recursive_quicksort(lst, start, l_ptr - 1)
+    recursive_quicksort(lst, l_ptr + 1, stop)
+
+test = []
+
+for i in range(1, 50):
+    test.append(int(random(1, 50)))
+
+print(test)
+recursive_quicksort(test, 0, len(test) - 1)
+print(test)
 
 def setup():
     pass
